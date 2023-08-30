@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+struct ArrayNode {
+    int *array;
+    int size;
+    struct ArrayNode *next;
+}
+struct ArrayNode *createArrayNode(int size) {
+    struct ArrayNode *newNode = (struct ArrayNode *)malloc(sizeof(struct ArrayNode));
+    newNode->size = size;
+    newNode->array = (int *)malloc(size * sizeof(int));
+    newNode->next = NULL;
+    return newNode;
+}
+
+
+void insertArrayNode(struct ArrayNode **head, int size) {
+    struct ArrayNode *newNode = createArrayNode(size);
+    
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    
+    struct ArrayNode *current = *head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    
+    current->next = newNode;
+}
+
+
+void displayLinkedList(struct ArrayNode *head) {
+    struct ArrayNode *current = head;
+    
+    while (current != NULL) {
+        printf("Array size: %d\n", current->size);
+        printf("Array elements: ");
+        for (int i = 0; i < current->size; i++) {
+            printf("%d ", current->array[i]);
+        }
+        printf("\n\n");
+        current = current->next;
+    }
+}
+
+
+void freeLinkedList(struct ArrayNode *head) {
+    struct ArrayNode *current = head;
+    
+    while (current != NULL) {
+        struct ArrayNode *temp = current;
+        current = current->next;
+        free(temp->array);
+        free(temp);
+    }
+}
+
+int main() {
+    struct ArrayNode *listHead = NULL;
+    
+
+    insertArrayNode(&listHead, 3);
+    insertArrayNode(&listHead, 5);
+    
+    
+    if (listHead != NULL) {
+        listHead->array[0] = 1;
+        listHead->array[1] = 2;
+        listHead->array[2] = 3;
+        
+        if (listHead->next != NULL) {
+            listHead->next->array[0] = 10;
+            listHead->next->array[1] = 20;
+            listHead->next->array[2] = 30;
+            listHead->next->array[3] = 40;
+            listHead->next->array[4] = 50;
+        }
+    }
+    
+    
+    displayLinkedList(listHead);
+    
+
+    freeLinkedList(listHead);
+    
+    return 0;
+}
